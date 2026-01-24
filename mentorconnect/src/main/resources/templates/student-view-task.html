@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>View Submitted Task</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+<!-- Header -->
+<div th:replace="~{fragments/header :: header}"></div>
+
+<!-- Main -->
+<main class="flex-fill">
+    <div class="container mt-4">
+        <h2 th:text="'Task: ' + ${task.title}"></h2>
+
+        <!-- Task Description -->
+        <div class="card mt-3">
+            <div class="card-header">
+                Task Description
+            </div>
+            <div class="card-body">
+                <pre th:text="${task.description}" style="white-space: pre-wrap;"></pre>
+            </div>
+        </div>
+
+        <!-- Student Submission -->
+        <div class="card mt-3">
+            <div class="card-header">
+                Your Submission
+            </div>
+            <div class="card-body">
+                <pre th:text="${submission.answer}" style="white-space: pre-wrap;"></pre>
+            </div>
+        </div>
+
+        <a th:href="@{/student/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
+    </div>
+</main>
+
+<!-- Footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+</body>
+</html>

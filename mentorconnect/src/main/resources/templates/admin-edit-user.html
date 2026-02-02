@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title th:text="${title}">Login</title>
+    <title>Edit User</title>
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -22,8 +22,7 @@
             min-height: 100vh;
         }
 
-        /* Login Card */
-        .login-card {
+        .edit-card {
             background: rgba(255, 255, 255, 0.96);
             border-radius: 18px;
             padding: 35px;
@@ -31,47 +30,41 @@
             animation: fadeIn 0.7s ease-in-out;
         }
 
-        h3 {
+        h2 {
             font-weight: 600;
             color: #2d3748;
             margin-bottom: 25px;
         }
 
-        /* Inputs */
-        .form-control {
+        label {
+            font-weight: 500;
+            color: #4a5568;
+        }
+
+        .form-control, .form-select {
             border-radius: 12px;
-            padding: 14px;
-            border: 1px solid #e2e8f0;
-            transition: all 0.3s ease;
+            padding: 12px;
         }
 
-        .form-control:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
-        }
-
-        /* Button */
         .btn-primary {
             background: linear-gradient(135deg, #667eea, #5a67d8);
             border: none;
+            border-radius: 12px;
             padding: 12px;
-            border-radius: 12px;
             font-weight: 500;
-            transition: all 0.3s ease;
         }
 
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Alerts */
-        .alert {
+        .btn-secondary {
             border-radius: 12px;
-            font-size: 14px;
+            padding: 12px;
+            font-weight: 500;
         }
 
-        /* Animation */
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+        }
+
         @keyframes fadeIn {
             from {
                 opacity: 0;
@@ -90,42 +83,62 @@
 <!-- Header -->
 <div th:replace="fragments/header :: header"></div>
 
-<!-- Main Content -->
+<!-- Main -->
 <main class="flex-fill">
     <div class="container mt-5 mb-5">
         <div class="row justify-content-center">
-            <div class="col-md-4 col-lg-4">
+            <div class="col-md-6 col-lg-5">
 
-                <div class="login-card">
-                    <h3 class="text-center">🔐 Login</h3>
+                <div class="edit-card">
+                    <h2 class="text-center">✏️ Edit User</h2>
 
-                    <form method="post" action="/login">
+                    <form th:action="@{/admin/update-user}" method="post">
+
+                        <input type="hidden" name="id" th:value="${user.id}"/>
+
+                        <!-- Name -->
                         <div class="mb-3">
-                            <input name="username"
+                            <label class="form-label">Name</label>
+                            <input type="text"
+                                   name="name"
                                    class="form-control"
-                                   placeholder="Email Address"
+                                   th:value="${user.name}"
                                    required>
                         </div>
 
+                        <!-- Email -->
                         <div class="mb-3">
-                            <input type="password"
-                                   name="password"
+                            <label class="form-label">Email</label>
+                            <input type="email"
+                                   name="email"
                                    class="form-control"
-                                   placeholder="Password"
+                                   th:value="${user.email}"
                                    required>
                         </div>
 
-                        <div th:if="${param.error}" class="alert alert-danger text-center">
-                            ❌ Invalid username or password
+                        <!-- Role -->
+                        <div class="mb-4">
+                            <label class="form-label">Role</label>
+                            <select name="role" class="form-select">
+                                <option th:each="r : ${roles}"
+                                        th:value="${r}"
+                                        th:text="${r}"
+                                        th:selected="${r == user.role}">
+                                </option>
+                            </select>
                         </div>
 
-                        <div th:if="${param.logout}" class="alert alert-success text-center">
-                            ✅ You have been logged out
+                        <!-- Buttons -->
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary w-100">
+                                💾 Update User
+                            </button>
+
+                            <a th:href="@{/admin/dashboard}" class="btn btn-secondary w-100">
+                                ❌ Cancel
+                            </a>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100">
-                            🚀 Login
-                        </button>
                     </form>
                 </div>
 
@@ -136,8 +149,6 @@
 
 <!-- Footer -->
 <div th:replace="fragments/footer :: footer"></div>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

@@ -2,19 +2,86 @@
 <html xmlns:th="http://www.thymeleaf.org">
 
 <head>
+    <meta charset="UTF-8">
     <title>View Submissions</title>
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
           rel="stylesheet">
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap"
+          rel="stylesheet">
+
     <style>
-        /* Make code answers scrollable */
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            min-height: 100vh;
+        }
+
+        /* Card */
+        .page-card {
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 18px;
+            padding: 30px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.18);
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        h2, h4 {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        /* Table */
+        .table {
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .table thead {
+            background: linear-gradient(135deg, #667eea, #5a67d8);
+            color: white;
+        }
+
+        .table td, .table th {
+            vertical-align: middle;
+        }
+
+        /* Code answers */
         pre {
-            white-space: pre-wrap; /* preserve line breaks */
+            white-space: pre-wrap;
             word-wrap: break-word;
             margin: 0;
+            font-size: 14px;
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 10px;
         }
+
         .table-container {
             overflow-x: auto;
+        }
+
+        /* Button */
+        .btn-secondary {
+            border-radius: 12px;
+            padding: 10px 18px;
+        }
+
+        /* Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
     </style>
 </head>
@@ -22,49 +89,67 @@
 <body class="d-flex flex-column min-vh-100">
 
 <!-- Header -->
-<div th:replace="~{fragments/header :: header}"></div>
+<div th:replace="fragments/header :: header"></div>
 
+<!-- Main Content -->
 <main class="flex-fill">
-    <div class="container mt-4">
-        <h2>View Submissions</h2>
+    <div class="container mt-5 mb-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-11">
 
-        <div th:each="entry : ${taskSubmissionsMap}" class="mb-5">
-            <!-- Task Title -->
-            <h4 th:text="${entry.key.title}">Task Title</h4>
+                <div class="page-card">
+                    <h2 class="text-center mb-4">📄 View Submissions</h2>
 
-            <!-- Table -->
-            <div class="table-container">
-                <table class="table table-bordered table-striped">
-                    <thead class="table-dark">
-                        <tr>
-                            <th>Student Name</th>
-                            <th>Answer</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Submissions -->
-                        <tr th:each="submission : ${entry.value}">
-                            <td th:text="${submission.student.name}">Student Name</td>
-                            <td>
-                                <pre th:text="${submission.answer}">Answer</pre>
-                            </td>
-                        </tr>
+                    <div th:each="entry : ${taskSubmissionsMap}" class="mb-5">
+                        <!-- Task Title -->
+                        <h4 class="mb-3" th:text="${entry.key.title}">Task Title</h4>
 
-                        <!-- No submissions -->
-                        <tr th:if="${#lists.isEmpty(entry.value)}">
-                            <td colspan="2" class="text-center">No submissions yet</td>
-                        </tr>
-                    </tbody>
-                </table>
+                        <!-- Table -->
+                        <div class="table-container">
+                            <table class="table table-bordered table-striped text-center">
+                                <thead>
+                                    <tr>
+                                        <th>Student Name</th>
+                                        <th>Answer</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Submissions -->
+                                    <tr th:each="submission : ${entry.value}">
+                                        <td th:text="${submission.student.name}">Student Name</td>
+                                        <td class="text-start">
+                                            <pre th:text="${submission.answer}">Answer</pre>
+                                        </td>
+                                    </tr>
+
+                                    <!-- No submissions -->
+                                    <tr th:if="${#lists.isEmpty(entry.value)}">
+                                        <td colspan="2" class="text-center text-muted">
+                                            No submissions yet
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <a th:href="@{/mentor/dashboard}" class="btn btn-secondary">
+                            ⬅ Back to Dashboard
+                        </a>
+                    </div>
+
+                </div>
+
             </div>
         </div>
-
-        <a th:href="@{/mentor/dashboard}" class="btn btn-secondary mt-3">Back to Dashboard</a>
     </div>
 </main>
 
 <!-- Footer -->
-<div th:replace="~{fragments/footer :: footer}"></div>
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>

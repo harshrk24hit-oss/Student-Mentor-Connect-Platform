@@ -110,4 +110,32 @@ public class AdminController {
         model.addAttribute("users", users);
         return "admin-view-users";
     }
+ // ===================== EDIT USER =====================
+    @GetMapping("/edit-user/{id}")
+    public String editUser(@PathVariable Long id, Model model) {
+
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        model.addAttribute("user", user);
+        model.addAttribute("roles", Role.values()); // for dropdown
+        return "admin-edit-user";
+    }
+
+    // ===================== UPDATE USER =====================
+    @PostMapping("/update-user")
+    public String updateUser(@ModelAttribute User user) {
+
+        User existingUser = userRepository.findById(user.getId())
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        existingUser.setName(user.getName());
+        existingUser.setEmail(user.getEmail());
+        existingUser.setRole(user.getRole());
+
+        userRepository.save(existingUser);
+
+        return "redirect:/admin/users";
+    }
+
 }
